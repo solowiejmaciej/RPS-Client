@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="static/favicon/favicon.ico"
+    />
+    <link rel="manifest" href="static/favicon/site.webmanifest" />
+    <title>Join lobbies</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="static\style\lobbies.css" />
+    <script
+      type="text/javascript"
+      src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=GA84mroqLJ3kxRYkjcFaFrPZ23jD8e1QN0kMVKLqcSVp_du2wwu0l_8AQBYBmRK9IUJKE_ZBwKS0oHvqtiME9nl4nW3Xk9294TXik7puZ3VaJwMEy4-b9lw5IVCcm8O5"
+      charset="UTF-8"
+    ></script>
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+    <div class="right">
+      <div class="photo">
+        <img
+          src="{{ ProfilePicture }}"
+          alt="profile picture"
+          width="90%"
+          height="90%"
+        />
+      </div>
+      <div class="username">{% print session['username'] %}</div>
+      <div class="coins">
+        <img src="static/coin.png" alt="coin" />
+        {% print(coins)%}
+      </div>
+      <a href="{{url_for('history')}}">History</a>
+      <a href="{{url_for('lobbies')}}">Lobbies</a>
+      <a href="{{url_for('account')}}">Account</a>
+    </div>
+  </body>
+</html>
