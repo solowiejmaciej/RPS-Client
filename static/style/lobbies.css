@@ -50,6 +50,8 @@ a {
   display: inline-block;
   width: 82%;
   height: 6%;
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+
 }
 a:hover {
   text-decoration: underline;

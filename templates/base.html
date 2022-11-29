@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <meta charset="UTF-8" />
     <link
       rel="icon"
@@ -37,9 +38,9 @@
         <img src="static/coin.png" alt="coin" />
         {% print(coins)%}
       </div>
-      <a href="{{url_for('history')}}">History</a>
-      <a href="{{url_for('lobbies')}}">Lobbies</a>
-      <a href="{{url_for('account')}}">Account</a>
+      <a href="{{url_for('history')}} " style="background-color:rgb{{color}}">History</a>
+      <a href="{{url_for('lobbies')}}" style="background-color:rgb{{color}}">Lobbies</a>
+      <a href="{{url_for('account')}}" style="background-color:rgb{{color}}">Account</a>
     </div>
   </body>
 </html>

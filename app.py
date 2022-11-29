@@ -16,7 +16,16 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import requests
 import os
+from colorthief import ColorThief
+from robohash import Robohash
 
+
+def CreateProfilePicture(hash):
+    path = "pictures/"
+    rh = Robohash(hash)
+    rh.assemble(roboset="set1")
+    with open(path + hash + "ProfilePicture" + ".png", "wb") as f:
+        rh.img.save(f, format="png")
 
 SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
@@ -123,6 +132,7 @@ def register():
             session["id"] = response.json()["UserID"]
             session["username"] = response.json()["username"]
             session["isloggedin"] = True
+            CreateProfilePicture(str(session["username"]))
             return redirect(url_for("lobbies"))
         else:
             return "Wrong register dataa"
@@ -136,8 +146,11 @@ def lobbies():
             "balance"
         ]
         ProfilePicture = "https://robohash.org/" + str(session["username"])
+        
+        color_thief = ColorThief(f"pictures/{str(session['username'])}ProfilePicture.png")
+        color = color_thief.get_color(quality=1)
         return render_template(
-            "lobbies.html", coins=coins, ProfilePicture=ProfilePicture
+            "lobbies.html", coins=coins, ProfilePicture=ProfilePicture, color=color
         )
     else:
         return redirect(url_for("login"))
@@ -150,8 +163,11 @@ def history():
             "balance"
         ]
         ProfilePicture = "https://robohash.org/" + str(session["username"])
+        CreateProfilePicture(str(session["username"]))
+        color_thief = ColorThief(f"pictures/{str(session['username'])}ProfilePicture.png")
+        color = color_thief.get_color(quality=1)
         return render_template(
-            "history.html", coins=coins, ProfilePicture=ProfilePicture
+            "history.html", coins=coins, ProfilePicture=ProfilePicture, color=color
         )
     else:
         return redirect(url_for("login"))
