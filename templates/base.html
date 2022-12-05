@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
     <meta charset="UTF-8" />
     <link
       rel="icon"
@@ -15,15 +14,16 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="static\style\lobbies.css" />
+    <link rel="stylesheet" href="static\style\base.css" />
     <script
       type="text/javascript"
       src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=GA84mroqLJ3kxRYkjcFaFrPZ23jD8e1QN0kMVKLqcSVp_du2wwu0l_8AQBYBmRK9IUJKE_ZBwKS0oHvqtiME9nl4nW3Xk9294TXik7puZ3VaJwMEy4-b9lw5IVCcm8O5"
       charset="UTF-8"
     ></script>
+    <script src="{{url_for('static', filename='lobbies.js')}}"></script>
   </head>
   <body>
-    {% block content %}{% endblock %}
+    {% block content %} {% endblock %}
     <div class="right">
       <div class="photo">
         <img
@@ -38,9 +38,24 @@
         <img src="static/coin.png" alt="coin" />
         {% print(coins)%}
       </div>
-      <a href="{{url_for('history')}} " style="background-color:rgb{{color}}">History</a>
-      <a href="{{url_for('lobbies')}}" style="background-color:rgb{{color}}">Lobbies</a>
-      <a href="{{url_for('account')}}" style="background-color:rgb{{color}}">Account</a>
+      <a
+        id="button"
+        href="{{url_for('history')}} "
+        style="background-color:rgb{{color}}"
+        >History</a
+      >
+      <a
+        id="button"
+        href="{{url_for('lobbies')}}"
+        style="background-color:rgb{{color}}"
+        >Lobbies</a
+      >
+      <a
+        id="button"
+        href="{{url_for('account')}}"
+        style="background-color:rgb{{color}}"
+        >Account</a
+      >
     </div>
   </body>
 </html>

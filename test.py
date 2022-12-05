@@ -1,7 +1,4 @@
-from colorthief import ColorThief
+import requests
 
-color_thief = ColorThief('pictures/TeStProfilePicture.png')
-
-dominant_color = color_thief.get_color(quality=1)
-
-print(dominant_color)
+for _ in range(1000):
+    requests.get("http://127.0.0.1:3000/GetLobbies")

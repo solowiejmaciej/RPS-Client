@@ -32,7 +32,7 @@ body {
   font-size: 40px;
 }
 
-a {
+#button {
   color: #eee;
   outline: 0;
   text-decoration: none;
@@ -43,7 +43,7 @@ a {
   font-size: 30px;
   font-weight: 700;
   text-transform: uppercase;
-  border-radius: 0.25rem;
+  border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 0.5em;
   width: 300px;
@@ -51,14 +51,64 @@ a {
   width: 82%;
   height: 6%;
   text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
-
 }
-a:hover {
+#button:hover {
   text-decoration: underline;
 }
 
-.username{
+.username {
   margin-top: 5%;
   font-weight: bold;
   font-size: 28px;
+}
+
+.container {
+  justify-content: center;
+  display: inline-grid;
+  justify-items: stretch;
+  column-gap: 10px;
+  width: 82%;
+  height: 80%;
+  grid-template-columns: repeat(4, 20%);
+  grid-auto-rows: 27%;
+}
+
+.lobby-item {
+  margin: 0;
+  background-color: #4a4e53;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.lobby-coins {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 40px;
+  float: right;
+  padding-right: 14px;
+}
+
+.lobby-join {
+  float: right;
+  margin: 0;
+}
+
+.lobby-join a {
+  color: #eee;
+  outline: 0;
+  text-decoration: none;
+  text-align: center;
+  justify-content: center;
+  background-color: #ea4c88;
+  color: #eee;
+  font-size: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: inline-block;
+  width: 200px;
+  height: 50px;
+  margin:5px;
 }

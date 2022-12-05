@@ -19,14 +19,6 @@ import os
 from colorthief import ColorThief
 from robohash import Robohash
 
-
-def CreateProfilePicture(hash):
-    path = "pictures/"
-    rh = Robohash(hash)
-    rh.assemble(roboset="set1")
-    with open(path + hash + "ProfilePicture" + ".png", "wb") as f:
-        rh.img.save(f, format="png")
-
 SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
 app.config["SECRET_KEY"] = SECRET_KEY
@@ -99,6 +91,7 @@ def login():
             session["isloggedin"] = True
             session["id"] = account["UserID"]
             session["username"] = account["Username"]
+            session["color"] = account["MainColor"]
             # Redirect to home page
             return redirect(url_for("lobbies"))
         else:
@@ -131,8 +124,8 @@ def register():
             print(response.json())
             session["id"] = response.json()["UserID"]
             session["username"] = response.json()["username"]
+            session["color"] = response.json()["MainColor"]
             session["isloggedin"] = True
-            CreateProfilePicture(str(session["username"]))
             return redirect(url_for("lobbies"))
         else:
             return "Wrong register dataa"
@@ -146,11 +139,16 @@ def lobbies():
             "balance"
         ]
         ProfilePicture = "https://robohash.org/" + str(session["username"])
-        
-        color_thief = ColorThief(f"pictures/{str(session['username'])}ProfilePicture.png")
-        color = color_thief.get_color(quality=1)
+
+        color = str(session["color"])
+
+        data = requests.get(API_URL + "/GetLobbies")
         return render_template(
-            "lobbies.html", coins=coins, ProfilePicture=ProfilePicture, color=color
+            "lobbies.html",
+            coins=coins,
+            ProfilePicture=ProfilePicture,
+            color=color,
+            data=data.json(),
         )
     else:
         return redirect(url_for("login"))
@@ -163,9 +161,9 @@ def history():
             "balance"
         ]
         ProfilePicture = "https://robohash.org/" + str(session["username"])
-        CreateProfilePicture(str(session["username"]))
-        color_thief = ColorThief(f"pictures/{str(session['username'])}ProfilePicture.png")
-        color = color_thief.get_color(quality=1)
+
+        color = str(session["color"])
+
         return render_template(
             "history.html", coins=coins, ProfilePicture=ProfilePicture, color=color
         )
@@ -177,9 +175,20 @@ def history():
 def spin():
     return "spin"
 
+
 @app.route("/account")
 def account():
     return "account"
+
+@app.route("/Player/<PlayerID>")
+def Player(PlayerID):
+    return PlayerID
+
+@app.route("/lobby/<LobbyID>")
+def Lobby(LobbyID):
+    return LobbyID
+
+
 
 @app.route("/favicon.ico")
 def favicon():
