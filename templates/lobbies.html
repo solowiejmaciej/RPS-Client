@@ -1,4 +1,11 @@
 {% extends "base.html" %} {% block content %}
+<div class="search-bar">
+  <form action="/lobbies" method="POST">
+    <input type="checkbox" name="IsVisible" value="1" default="0">Private?</input>
+    <input type="text" name="LobbyValue" placeholder="Value"href="#" required></input>
+    <input type="submit" value="CREATE" href="#"></input>
+  </form>
+</div>
 <div class="container">
   {% for lobby in data%}
   <div class="lobby-item">
@@ -12,7 +19,7 @@
     </a>
   </div>
   <div class="lobby-join">
-    <a href=/lobby/{{lobby['LobbyID']}} style="background-color:rgb{{color}}" onclick="">Join</a>
+    <a href=/lobby/{{lobby['LobbyID']}} style="background-color:rgb{{color}}"">Join</a>
   </div>
 </div>
 {%endfor%}

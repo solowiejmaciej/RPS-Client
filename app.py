@@ -10,14 +10,14 @@ from flask import (
     session,
 )
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField
+from wtforms import (StringField, TextAreaField, IntegerField, BooleanField,PasswordField,SubmitField,
+                     RadioField)
 from wtforms.validators import InputRequired, Length
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import requests
 import os
-from colorthief import ColorThief
-from robohash import Robohash
+
 
 SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
@@ -133,7 +133,6 @@ def register():
             return "Wrong register dataa"
     return render_template("register.html", form=register)
 
-
 @app.route("/lobbies", methods=["GET", "POST"])
 def lobbies():
     if "username" in session:
@@ -141,10 +140,19 @@ def lobbies():
             "balance"
         ]
         ProfilePicture = "https://robohash.org/" + str(session["username"])
-
         color = str(session["color"])
+        PlayerID = session["PlayerID"]
+        if request.method == "POST":
+            LobbyValue = request.form['LobbyValue']
+            if "IsVisible" in request.form:
+                response = requests.post(API_URL + "/CreateNewLobby", params={"ApiUser": API_USER,"PlayerID": PlayerID, "IsVisible": 0, "LobbyValue": LobbyValue}).json()
+            else:
+                response = requests.post(API_URL + "/CreateNewLobby", params={"ApiUser": API_USER,"PlayerID": PlayerID, "LobbyValue": LobbyValue}).json()
+            LobbyID = response['LobbyID']
+            return redirect(url_for('lobby',LobbyID=LobbyID))
 
-        data = requests.get(API_URL + "/GetLobbies")
+
+        data = requests.get(API_URL + "/GetLobbies", params={"PlayerID": PlayerID})
         return render_template(
             "lobbies.html",
             coins=coins,
@@ -183,12 +191,20 @@ def account():
     return "account"
 
 @app.route("/Player/<PlayerID>")
-def Player(PlayerID):
+def player(PlayerID):
     return PlayerID
 
 @app.route("/lobby/<LobbyID>")
-def Lobby(LobbyID):
-    requests.post(API_URL + "/JoinNewLobby", params={'PlayerID':session["PlayerID"], 'LobbyID':LobbyID, 'ApiUser':API_USER})
+def lobby(LobbyID):
+    if 'PlayerID'not in session:
+        return redirect(url_for("login"))
+    PlayerOneID = 0
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+            "SELECT PlayerOneID FROM lobbies WHERE LobbyID =%s",(LobbyID,))
+    PlayerOneID = cursor.fetchone()['PlayerOneID']
+    if PlayerOneID != session['PlayerID']:
+        requests.post(API_URL + "/JoinNewLobby", params={'PlayerID':session["PlayerID"], 'LobbyID':LobbyID, 'ApiUser':API_USER})
     return LobbyID
 
 

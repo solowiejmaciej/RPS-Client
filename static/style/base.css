@@ -18,6 +18,7 @@ body {
 }
 
 .right {
+  display: block;
   text-align: center;
   float: right;
   width: 18%;
@@ -63,6 +64,7 @@ body {
 }
 
 .container {
+  margin-top: 9%;
   justify-content: center;
   display: inline-grid;
   justify-items: stretch;
@@ -71,6 +73,56 @@ body {
   height: 80%;
   grid-template-columns: repeat(4, 20%);
   grid-auto-rows: 27%;
+}
+
+.search-bar {
+  padding-top: 7%;
+  position: absolute;
+  display: inline-grid;
+  margin: auto;
+  justify-content: right;
+  width: 74.88%;
+  height: 5%;
+}
+
+.search-bar form {
+  vertical-align: center;
+  color: white;
+  font-size: 13px;
+  font-weight: 400;
+  font-weight: bold;
+}
+
+.search-bar input[type="submit"] {
+  color: #eee;
+  outline: 0;
+  text-decoration: none;
+  text-align: center;
+  justify-content: center;
+  background-color: #ea4c88;
+  color: #eee;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+  margin: 5px;
+}
+
+.search-bar input[type="text"] {
+  text-align: center;
+  width: 70px;
+  height: 40px;
+  background-color: #4a4e53;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .lobby-item {
@@ -110,5 +162,5 @@ body {
   display: inline-block;
   width: 200px;
   height: 50px;
-  margin:5px;
+  margin: 5px;
 }
