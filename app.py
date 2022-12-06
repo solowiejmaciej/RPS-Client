@@ -90,6 +90,7 @@ def login():
             # Create session data, we can access this data in other routes
             session["isloggedin"] = True
             session["id"] = account["UserID"]
+            session["PlayerID"] = account["PlayerID"]
             session["username"] = account["Username"]
             session["color"] = account["MainColor"]
             # Redirect to home page
@@ -123,6 +124,7 @@ def register():
         if response.status_code == 200:
             print(response.json())
             session["id"] = response.json()["UserID"]
+            session["PlayerID"] = response.json()["PlayerID"]
             session["username"] = response.json()["username"]
             session["color"] = response.json()["MainColor"]
             session["isloggedin"] = True
@@ -186,6 +188,7 @@ def Player(PlayerID):
 
 @app.route("/lobby/<LobbyID>")
 def Lobby(LobbyID):
+    requests.post(API_URL + "/JoinNewLobby", params={'PlayerID':session["PlayerID"], 'LobbyID':LobbyID, 'ApiUser':API_USER})
     return LobbyID
 
 
