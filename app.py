@@ -22,9 +22,9 @@ import os
 SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
 app.config["SECRET_KEY"] = SECRET_KEY
-app.config["MYSQL_HOST"] = "146.59.33.189"
-app.config["MYSQL_USER"] = "rps"
-app.config["MYSQL_PASSWORD"] = "Fit&Fun13"
+app.config["MYSQL_HOST"] = "127.0.0.1"
+app.config["MYSQL_USER"] = "root"
+app.config["MYSQL_PASSWORD"] = "root"
 app.config["MYSQL_DB"] = "rps"
 mysql = MySQL(app)
 
