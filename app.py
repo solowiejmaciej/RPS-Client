@@ -10,8 +10,15 @@ from flask import (
     session,
 )
 from flask_wtf import FlaskForm
-from wtforms import (StringField, TextAreaField, IntegerField, BooleanField,PasswordField,SubmitField,
-                     RadioField)
+from wtforms import (
+    StringField,
+    TextAreaField,
+    IntegerField,
+    BooleanField,
+    PasswordField,
+    SubmitField,
+    RadioField,
+)
 from wtforms.validators import InputRequired, Length
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -22,9 +29,9 @@ import os
 SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
 app.config["SECRET_KEY"] = SECRET_KEY
-app.config["MYSQL_HOST"] = "146.59.33.189"
-app.config["MYSQL_USER"] = "rps"
-app.config["MYSQL_PASSWORD"] = "Fit&Fun13"
+app.config["MYSQL_HOST"] = "127.0.0.1"
+app.config["MYSQL_USER"] = "root"
+app.config["MYSQL_PASSWORD"] = "root"
 app.config["MYSQL_DB"] = "rps"
 mysql = MySQL(app)
 
@@ -133,6 +140,7 @@ def register():
             return "Wrong register dataa"
     return render_template("register.html", form=register)
 
+
 @app.route("/lobbies", methods=["GET", "POST"])
 def lobbies():
     if "username" in session:
@@ -143,22 +151,43 @@ def lobbies():
         color = str(session["color"])
         PlayerID = session["PlayerID"]
         if request.method == "POST":
-            LobbyValue = request.form['LobbyValue']
+            LobbyValue = request.form["LobbyValue"]
             if "IsVisible" in request.form:
-                response = requests.post(API_URL + "/CreateNewLobby", params={"ApiUser": API_USER,"PlayerID": PlayerID, "IsVisible": 0, "LobbyValue": LobbyValue}).json()
+                response = requests.post(
+                    API_URL + "/CreateNewLobby",
+                    params={
+                        "ApiUser": API_USER,
+                        "PlayerID": PlayerID,
+                        "IsVisible": 0,
+                        "LobbyValue": LobbyValue,
+                    },
+                ).json()
             else:
-                response = requests.post(API_URL + "/CreateNewLobby", params={"ApiUser": API_USER,"PlayerID": PlayerID, "LobbyValue": LobbyValue}).json()
-            LobbyID = response['LobbyID']
-            return redirect(url_for('lobby',LobbyID=LobbyID))
+                response = requests.post(
+                    API_URL + "/CreateNewLobby",
+                    params={
+                        "ApiUser": API_USER,
+                        "PlayerID": PlayerID,
+                        "LobbyValue": LobbyValue,
+                    },
+                ).json()
+            LobbyID = response["LobbyID"]
+            return redirect(url_for("lobby", LobbyID=LobbyID))
 
+        LobbyData = requests.get(API_URL + "/GetLobbies", params={"PlayerID": PlayerID})
+        data = request.args.to_dict()
+        if request.method == "GET" and 'min' and 'max' in data:
+            MinLobbyValue = data["min"]
+            MaxLobbyValue = data["max"]
+            print(MinLobbyValue, MaxLobbyValue)
+            LobbyData = requests.get(API_URL + "/GetLobbies", params={"PlayerID": PlayerID, "MaxLobbyValue": MaxLobbyValue, "MinLobbyValue": MinLobbyValue})
 
-        data = requests.get(API_URL + "/GetLobbies", params={"PlayerID": PlayerID})
         return render_template(
             "lobbies.html",
             coins=coins,
             ProfilePicture=ProfilePicture,
             color=color,
-            data=data.json(),
+            data=LobbyData.json(),
         )
     else:
         return redirect(url_for("login"))
@@ -190,23 +219,30 @@ def spin():
 def account():
     return "account"
 
+
 @app.route("/Player/<PlayerID>")
 def player(PlayerID):
     return PlayerID
 
+
 @app.route("/lobby/<LobbyID>")
 def lobby(LobbyID):
-    if 'PlayerID'not in session:
+    if "PlayerID" not in session:
         return redirect(url_for("login"))
     PlayerOneID = 0
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute(
-            "SELECT PlayerOneID FROM lobbies WHERE LobbyID =%s",(LobbyID,))
-    PlayerOneID = cursor.fetchone()['PlayerOneID']
-    if PlayerOneID != session['PlayerID']:
-        requests.post(API_URL + "/JoinNewLobby", params={'PlayerID':session["PlayerID"], 'LobbyID':LobbyID, 'ApiUser':API_USER})
+    cursor.execute("SELECT PlayerOneID FROM lobbies WHERE LobbyID =%s", (LobbyID,))
+    PlayerOneID = cursor.fetchone()["PlayerOneID"]
+    if PlayerOneID != session["PlayerID"]:
+        requests.post(
+            API_URL + "/JoinNewLobby",
+            params={
+                "PlayerID": session["PlayerID"],
+                "LobbyID": LobbyID,
+                "ApiUser": API_USER,
+            },
+        )
     return LobbyID
-
 
 
 @app.route("/favicon.ico")
